@@ -11,21 +11,22 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
-@Component //forma de injetar com componente
+@Component // forma de injetar com componente
 public class CozinhaRepositoryImpl implements CozinhaRepository {
 
-	@PersistenceContext //forma de injectar uma persistencia
+	@PersistenceContext // forma de injectar uma persistencia
 	private EntityManager manager;
 
 	@Override
 	public List<Cozinha> listar() {
-		TypedQuery<Cozinha>	query = manager.createQuery("from Cozinha", Cozinha.class);
+		TypedQuery<Cozinha> query = manager.createQuery("from Cozinha", Cozinha.class);
 		return query.getResultList();
 
 	}
@@ -35,7 +36,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 		return manager.find(Cozinha.class, id);
 	}
 
-	@Transactional //annotation para iniciar e fechar uma transação no banco
+	@Transactional // annotation para iniciar e fechar uma transação no banco
 	@Override
 	public Cozinha salvar(Cozinha cozinha) {
 		return manager.merge(cozinha);
@@ -43,10 +44,15 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 
 	@Transactional
 	@Override
-	public void remover(Cozinha cozinha) {
-		cozinha = buscar(cozinha.getId());
-		manager.remove(cozinha);
-	}
+	public void remover(Long id) {
+		Cozinha cozinha = buscar(id);
 
+		if (cozinha == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+
+		manager.remove(cozinha);
+
+	}
 
 }
