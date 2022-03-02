@@ -1,23 +1,28 @@
 package com.algaworks.algafood.domain.repository;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
+import com.algaworks.algafood.domain.model.Cozinha;
+
 /*
- *
+*
 - repository faz a abstração de acesso a dados (dao)
 - em repository não se pensa em implementação , se pensa em negócio, imitar uma coleção.
 - o que um repositorory de cozinha tem que ter? TEm que listar a cozinha? Buscar? Adicionar
 - no repository não diz nada sobre o mecanismo usado para persister os dados
- *
- */
+*
+*/
 
-import java.util.List;
+@Repository
+public interface CozinhaRepository extends CustomJpaRepository<Cozinha, Long> {
 
-import com.algaworks.algafood.domain.model.Cozinha;
-
-public interface CozinhaRepository {
-
-	List<Cozinha> listar();
-	Cozinha buscar(Long id);
-	Cozinha salvar(Cozinha cozinha);
-	void remover(Long id);
-
+	List<Cozinha> findTodasByNomeContaining(String nome);
+	
+	Optional<Cozinha> findByNome(String nome);
+	
+	boolean existsByNome(String nome);
+	
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.domain.model.Estado;
+import com.algaworks.algafood.domain.repository.EstadoRepository;
 
 /*
  Por que usar o service? Porque no futuro pode ter uma regra de negócio e seria aqui que colocaríamos.
@@ -18,27 +18,28 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
  */
 
 @Service
-public class CadastroCozinhaService {
+public class CadastroEstadoService {
 
 	@Autowired
-	private CozinhaRepository cozinhaRepository;
+	private EstadoRepository estadoRepository;
 
-	public Cozinha salvar(Cozinha cozinha) {
-		return cozinhaRepository.save(cozinha);
+	public Estado salvar(Estado estado) {
+		return estadoRepository.save(estado);
 
 	}
 
-	public void excluir(Long cozinhaId) {
+	public void excluir(Long estadoId) {
 
 		try {
-			cozinhaRepository.deleteById(cozinhaId);
-		
+			estadoRepository.deleteById(estadoId);
+
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(
-					String.format("Não existe cadastro de cozinha com o código %d", cozinhaId));
-			
+					String.format("Não existe cadastro de estado com o código %d", estadoId));
+
 		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(String.format("Cozinha de código %d não pode ser removida, pois está em uso" , cozinhaId));
+			throw new EntidadeEmUsoException(
+					String.format("Estado de código %d não pode ser removida, pois está em uso", estadoId));
 		}
 
 	}
